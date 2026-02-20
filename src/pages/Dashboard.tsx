@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { api } from '@/lib/api';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -29,6 +30,29 @@ import {
 const Dashboard = () => {
   const { student } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [annResponse, lbResponse] = await Promise.all([
+          api.get('/announcements'),
+          api.get('/users/leaderboard')
+        ]);
+
+        if (annResponse.success) setAnnouncements(annResponse.data);
+        if (lbResponse.success) setLeaderboard(lbResponse.data);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const quickStats = {
     totalTests: 45,
@@ -83,10 +107,10 @@ const Dashboard = () => {
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
-            Welcome back, {student?.first_name}!
+            Welcome back, {student?.name}!
           </h1>
           <p className="text-muted-foreground">
-            Continue your GATE preparation journey for {student?.department?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+            Continue your GATE preparation journey for {student?.branch || 'your branch'}
           </p>
         </div>
 
@@ -242,19 +266,26 @@ const Dashboard = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Bell className="h-5 w-5" />
-                  Recent Notifications
+                  Recent Announcements
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {notifications.map((notification) => (
-                    <div key={notification.id} className="flex items-start gap-3 p-3 bg-accent/50 rounded-lg">
-                      <div className="flex-1">
-                        <p className="text-sm">{notification.text}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
+                  {announcements.length > 0 ? (
+                    announcements.map((ann) => (
+                      <div key={ann._id} className="flex items-start gap-3 p-3 bg-accent/50 rounded-lg">
+                        <div className="flex-1">
+                          <p className="font-semibold text-sm">{ann.title}</p>
+                          <p className="text-sm">{ann.description}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {new Date(ann.createdAt).toLocaleDateString()} • {ann.type}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground text-center">No recent announcements</p>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -406,16 +437,24 @@ const Dashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-primary/10 rounded-lg border border-primary/20">
-                      <div className="flex items-center gap-3">
-                        <Badge className="bg-primary">#{quickStats.rank}</Badge>
-                        <div>
-                          <p className="font-medium">{student?.first_name} {student?.last_name}</p>
-                          <p className="text-sm text-muted-foreground">You</p>
+                    {leaderboard.length > 0 ? (
+                      leaderboard.map((entry, index) => (
+                        <div key={entry._id} className={`flex items-center justify-between p-3 rounded-lg border ${
+                          entry._id === student?._id ? 'bg-primary/10 border-primary/20' : 'bg-accent/50 border-transparent'
+                        }`}>
+                          <div className="flex items-center gap-3">
+                            <Badge className={index < 3 ? 'bg-yellow-500' : ''}>#{index + 1}</Badge>
+                            <div>
+                              <p className="font-medium">{entry.user.name}</p>
+                              <p className="text-sm text-muted-foreground">{entry.user.branch}</p>
+                            </div>
+                          </div>
+                          <span className="font-bold">{Math.round(entry.averageScore)}%</span>
                         </div>
-                      </div>
-                      <span className="font-bold">{quickStats.averageScore}%</span>
-                    </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-muted-foreground text-center">No data available</p>
+                    )}
                     <p className="text-sm text-muted-foreground text-center">
                       University-wide ranking based on overall performance
                     </p>

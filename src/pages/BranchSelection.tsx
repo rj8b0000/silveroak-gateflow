@@ -17,54 +17,47 @@ import { useToast } from '@/hooks/use-toast';
 
 const branches = [
   {
-    id: 'computer-engineering',
+    id: 'CE',
     name: 'Computer Engineering',
     description: 'Software, algorithms, and computing systems',
     icon: Computer,
     color: 'from-blue-500 to-blue-600'
   },
   {
-    id: 'civil-engineering',
+    id: 'CIVIL',
     name: 'Civil Engineering',
     description: 'Infrastructure, construction, and structural design',
     icon: Building,
     color: 'from-gray-500 to-gray-600'
   },
   {
-    id: 'mechanical-engineering',
+    id: 'ME',
     name: 'Mechanical Engineering',
     description: 'Machines, thermodynamics, and manufacturing',
     icon: Cog,
     color: 'from-orange-500 to-orange-600'
   },
   {
-    id: 'electrical-engineering',
+    id: 'EE',
     name: 'Electrical Engineering',
     description: 'Power systems, electronics, and circuits',
     icon: Zap,
     color: 'from-yellow-500 to-yellow-600'
   },
   {
-    id: 'electronics-communication',
+    id: 'EC',
     name: 'Electronics & Communication',
     description: 'Communication systems and signal processing',
     icon: Radio,
     color: 'from-purple-500 to-purple-600'
   },
   {
-    id: 'chemical-engineering',
-    name: 'Chemical Engineering',
-    description: 'Process design, materials, and reactions',
+    id: 'IT',
+    name: 'Information Technology',
+    description: 'Computer systems and digital infrastructure',
     icon: Atom,
     color: 'from-green-500 to-green-600'
   },
-  {
-    id: 'aerospace-engineering',
-    name: 'Aerospace Engineering',
-    description: 'Aircraft, spacecraft, and aerodynamics',
-    icon: Plane,
-    color: 'from-indigo-500 to-indigo-600'
-  }
 ];
 
 const BranchSelection = () => {
@@ -122,7 +115,7 @@ const BranchSelection = () => {
               <GraduationCap className="h-8 w-8 text-primary" />
             </div>
             <CardTitle className="text-3xl font-bold text-foreground mb-2">
-              Welcome {student?.first_name}!
+              Welcome {student?.name}!
             </CardTitle>
             <CardDescription className="text-lg">
               Select your engineering branch to customize your GATE preparation experience

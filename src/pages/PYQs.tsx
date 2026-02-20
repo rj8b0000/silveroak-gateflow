@@ -188,7 +188,7 @@ const PYQs = () => {
             Past Year Questions (PYQs)
           </h1>
           <p className="text-muted-foreground">
-            Last 5 years of GATE papers for {student?.department?.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+            Last 5 years of GATE papers for {student?.branch}
           </p>
         </div>
 

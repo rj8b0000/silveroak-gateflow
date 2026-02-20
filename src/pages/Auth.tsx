@@ -55,7 +55,7 @@ const Auth = () => {
 
   useEffect(() => {
     if (student && !loading) {
-      if (!student.branch_selected) {
+      if (!student.branch) {
         navigate('/branch-selection');
       } else {
         navigate('/dashboard');
