@@ -1,4 +1,6 @@
 import express from 'express';
+console.log('SERVER STARTING...');
+console.log('URI START:', process.env.MONGO_URI ? process.env.MONGO_URI.substring(0, 20) : 'NONE');
 import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/db.js';
