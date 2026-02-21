@@ -13,7 +13,7 @@ import notesRoutes from './routes/notesRoutes.js';
 import announcementRoutes from './routes/announcementRoutes.js';
 
 // Load env vars
-dotenv.config();
+dotenv.config({ override: true });
 
 // Connect to database
 connectDB();
