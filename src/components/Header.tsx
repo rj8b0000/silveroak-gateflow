@@ -61,10 +61,7 @@ const Header = () => {
                 >
                   <User className="h-4 w-4" />
                   <span className="text-sm font-medium">
-                    {student.first_name} {student.last_name}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    ({student.enrollment_no})
+                    {student.name}
                   </span>
                 </div>
                 <Button variant="outline" onClick={handleSignOut} className="hidden md:inline-flex">
@@ -133,8 +130,7 @@ const Header = () => {
                             setIsMobileMenuOpen(false);
                           }}
                         >
-                          <p className="text-sm font-medium">{student.first_name} {student.last_name}</p>
-                          <p className="text-xs text-muted-foreground">{student.enrollment_no}</p>
+                          <p className="text-sm font-medium">{student.name}</p>
                         </div>
                         <Button variant="outline" onClick={handleSignOut} className="w-full">
                           <LogOut className="h-4 w-4 mr-2" />
